@@ -1,4 +1,5 @@
 #!/usr/bin/env bash
+# this script will work only if you have the VM running and SSH setup correctly
 pushd .
 scp -P 2222 user1@127.0.0.1:/usr/bin/php71 ./php
 cd phplibs
