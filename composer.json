@@ -1,10 +1,12 @@
 {
-  "name": "araines/serverless-php",
-  "description": "Boilerplate project for Serverless Framework and PHP",
+  "name": "niron1/serverless-php-lambda",
+  "description": "Lambda project for running PHP artifacts without server on AWS with php libraries such as redis",
   "type": "project",
+  "homepage" : "http://crazylister.com/",
   "autoload": {
     "psr-4": {
-      "Raines\\Serverless\\": "src"
+      "Raines\\Serverless\\": "src",
+      "CrazyLister\\Serverless\\": "src"
     }
   },
   "require": {
@@ -13,7 +15,8 @@
     "psr/log": "^1.0",
     "symfony/config": "^4.0",
     "symfony/dependency-injection": "^4.0",
-    "symfony/yaml": "^4.0"
+    "symfony/yaml": "^4.0",
+    "illuminate/redis": "^5.6"
   },
   "require-dev": {
   }

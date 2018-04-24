@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\Loader\YamlFileLoader;
 
 // Set up service container
 $container = new ContainerBuilder();
-$loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/config'));
+$loader = new YamlFileLoader($container, new FileLocator(__DIR__ . '/.'));
 $loader->load('services.yml');
 
 // Get event data and context object
@@ -23,4 +23,4 @@ $handler = $container->get(getenv('HANDLER'));
 $response = $handler->handle($event, $context);
 
 // Send data back to shim
-printf(json_encode($response));
+echo json_encode($response);

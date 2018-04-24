@@ -4,49 +4,43 @@ var child_process = require('child_process');
 
 module.exports.handle = (event, context, callback) => {
 
-  var response = '';
-  var php = './php';
-
-  // When using 'serverless invoke local' use the system PHP binary instead
-  if (typeof process.env.PWD !== "undefined") {
-    php = 'php';
-  }
-
-  // Build the context object data
-  var contextData = {};
-  Object.keys(context).forEach(function(key) {
-    if (typeof context[key] !== 'function') {
-      contextData[key] = context[key];
-    }
-  });
-
-  // Launch PHP
-  var args = ['handler.php', JSON.stringify(event), JSON.stringify(contextData)];
-  var options = {'stdio': ['pipe', 'pipe', 'pipe', 'pipe']};
-  var proc = child_process.spawn(php, args, options);
-
-  // Request for remaining time from context
-  proc.stdio[3].on('data', function (data) {
-    var remaining = context.getRemainingTimeInMillis();
-    proc.stdio[3].write(`${remaining}\n`);
-  });
-
-  // Output
-  proc.stdout.on('data', function (data) {
-    response += data.toString()
-  });
-
-  // Logging
-  proc.stderr.on('data', function (data) {
-    console.log(`${data}`);
-  });
-
-  // PHP script execution end
-  proc.on('close', function(code) {
-    if (code !== 0) {
-      return callback(new Error(`Process error code ${code}: ${response}`));
+    process.env.PATH = `${process.env.PATH}:${process.env.LAMBDA_TASK_ROOT}`;
+    // When using 'serverless invoke local' use the system PHP binary instead
+    var executable = './bash'; // no arguments here!
+    var php = './php';
+    if (typeof process.env.PWD !== "undefined") {
+        php = 'php';
+        executable = 'bash';
     }
 
-    callback(null, JSON.parse(response));
-  });
+    // Build the context object data
+    var contextData = {};
+    Object.keys(context).forEach(function(key) {
+        if (typeof context[key] !== 'function') {
+            contextData[key] = context[key];
+        }
+    });
+    // Launch PHP
+    var args = `handler.php ${JSON.stringify(event)} ${JSON.stringify(contextData)}`;
+
+    const command =['-c',`${php} ${args}`];
+    var response = '';
+    var env = Object.create( process.env );
+    env.PHPRC = `${process.env.LAMBDA_TASK_ROOT}/phpini/php.ini`;
+    env.LD_LIBRARY_PATH = `${process.env.LAMBDA_TASK_ROOT}/phplibs:${process.env.PATH}`;
+    env.PHP_INI_SCAN_DIR = `${process.env.LAMBDA_TASK_ROOT}/phpini/php.d`;
+    var options = {'env': env, 'stdio': ['pipe', 'pipe', 'pipe', 'pipe']};
+
+    try {
+      const child = child_process.spawnSync(executable, command , options);
+      response += (`{stdout: ${child.stdout && child.stdout.toString().length ? child.stdout.toString() : '""'}`);
+      response += (`,stderr:"${child.stderr ? child.stderr.toString() : ''}"`);
+      response += (`,status:"${child.status ? child.status.toString() : ''}"`);
+      response += (`,signal:"${child.signal ? child.signal.toString() : ''}"}`);
+    } catch (exception) {
+      response += (`Process crashed! Error: ${exception}`);
+    }
+
+   callback(null, response);
+
 };
