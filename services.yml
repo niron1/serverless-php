@@ -25,10 +25,11 @@ services:
     calls:
       - [setFormatter, ['@logging.formatter']]
 
-# Define your own handlers and other services here
-  handler.hello:
+  handler.phpinfo:
     public: true
-    class: Raines\Serverless\HelloHandler
+    class: CrazyLister\Serverless\PHPInfo
 
-#  handler.example:
-#    class: Acme\ExampleHandler
+  handler.printHelloWorld:
+    public: true
+    class: CrazyLister\Serverless\PrintHelloWorld
+
