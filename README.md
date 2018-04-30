@@ -69,9 +69,7 @@ class PrintHelloWorld implements \Raines\Serverless\Handler
 * [Node](https://nodejs.org)
 * [Composer](https://getcomposer.org/)
 * [VirtualBox](https://www.virtualbox.org/wiki/Downloads)  (only if you wish to add php extensions)
-
-having AWS environment variables defined: 
-
+* having AWS environment variables defined: 
 export AWS_ACCESS_KEY_ID=<your-key-here>
 export AWS_SECRET_ACCESS_KEY=<your-secret-key-here>
 
