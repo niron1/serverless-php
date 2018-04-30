@@ -73,7 +73,7 @@ class PrintHelloWorld implements \Raines\Serverless\Handler
 
 Install this project:
 ```
-serverless install --url https://github.com/niron1/serverless-php-lambda
+git clone https://github.com/niron1/serverless-php-lambda
 ```
 
 
