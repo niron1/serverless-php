@@ -68,7 +68,7 @@ class PrintHelloWorld implements \Raines\Serverless\Handler
 * [Serverless](https://serverless.com/)
 * [Node](https://nodejs.org)
 * [Composer](https://getcomposer.org/)
-* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)
+* [VirtualBox](https://www.virtualbox.org/wiki/Downloads)  (only if you wish to add php extensions)
 
 
 Install this project:
