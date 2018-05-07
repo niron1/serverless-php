@@ -34,7 +34,7 @@ module.exports.handle = (event, context, callback) => {
     try {
       const child = child_process.spawnSync(executable, command , options);
       const shouldAddParenthesis = child.stdout && child.stdout.toString().length && child.stdout.toString()[0] !== '{' &&  child.stdout.toString()[0] !== '"' &&  child.stdout.toString()[0] !== "\'";
-      response += (`{stdout: ${shouldAddParenthesis?"\"":""} ${child.stdout && child.stdout.toString().length ? child.stdout.toString() + (shouldAddParenthesis ? "\"" : "") : '""'}`);
+      response += (`{stdout: ${shouldAddParenthesis?"\"":""}${child.stdout && child.stdout.toString().length ? child.stdout.toString() + (shouldAddParenthesis ? "\"" : "") : '""'}`);
       response += (`,stderr:"${child.stderr ? child.stderr.toString() : ''}"`);
       response += (`,status:"${child.status ? child.status.toString() : ''}"`);
       response += (`,signal:"${child.signal ? child.signal.toString() : ''}"}`);
